@@ -95,5 +95,6 @@ public class FcUserStorageProviderFactory implements UserStorageProviderFactory<
         } catch (Exception e) {
             throw new ComponentValidationException("DB 연결 실패: " + e.getMessage(), e);
         }
+
     }
 }

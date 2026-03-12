@@ -127,7 +127,6 @@ public class FcUserStorageProvider implements
 
     @Override
     public boolean isValid(RealmModel realm, UserModel user, CredentialInput input) {
-        System.err.println("=== isValid 호출됨 ===");
 
         if (!supportsCredentialType(input.getType())) {
             return false;

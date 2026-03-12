@@ -5,8 +5,12 @@ import com.fc.keycloak.userstorage.repository.UserRepository;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.RoleModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Controller 같은 느낌
@@ -35,7 +39,6 @@ public class FcUserAdapter extends AbstractUserAdapterFederatedStorage {
     @Override
     public void setUsername(String username) {
         user.setUserId(username);
-        // userId 수정까지 허용할 거 아니면 보통 막거나 그대로 둠
     }
 
     @Override
@@ -61,5 +64,19 @@ public class FcUserAdapter extends AbstractUserAdapterFederatedStorage {
 
     public UserEntity getUserEntity() {
         return user;
+    }
+
+    @Override // user 에서 role 꺼내다 씀
+    protected Set<RoleModel> getRoleMappingsInternal() {
+        Set<RoleModel> roles = new HashSet<>();
+
+        String dbRole = user.getRole(); // "USER" or "ADMIN"
+        if (dbRole != null && !dbRole.isBlank()) {
+            RoleModel roleModel = realm.getRole(dbRole);
+            if (roleModel != null) {
+                roles.add(roleModel);
+            }
+        }
+        return roles;
     }
 }

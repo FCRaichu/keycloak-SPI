@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -111,6 +112,21 @@ public class JdbcUserRepository implements UserRepository {
         } catch (SQLException e) {
             throw new RuntimeException("existsByNickname 실패", e);
         }
+    }
+
+    @Override
+    public List<UserEntity> findAll(Integer firstResult, Integer maxResults) {
+        return List.of();
+    }
+
+    @Override
+    public List<UserEntity> findByUserIdContaining(String keyword, Integer firstResult, Integer maxResults) {
+        return List.of();
+    }
+
+    @Override
+    public int countAll() {
+        return 0;
     }
 
     @Override

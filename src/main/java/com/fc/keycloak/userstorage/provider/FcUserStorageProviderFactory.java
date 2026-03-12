@@ -14,6 +14,10 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.util.List;
 
+/**
+ * Keycloak -> DB 연동
+ */
+
 public class FcUserStorageProviderFactory implements UserStorageProviderFactory<FcUserStorageProvider> {
 
     public static final String PROVIDER_ID = "fc-user-storage";

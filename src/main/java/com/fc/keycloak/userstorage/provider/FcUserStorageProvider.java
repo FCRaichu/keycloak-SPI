@@ -2,6 +2,7 @@ package com.fc.keycloak.userstorage.provider;
 
 import com.fc.keycloak.userstorage.model.UserEntity;
 import com.fc.keycloak.userstorage.repository.UserRepository;
+import com.fc.keycloak.userstorage.util.PasswordUtil;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.credential.CredentialInput;
 import org.keycloak.models.*;
@@ -12,17 +13,19 @@ import org.keycloak.credential.CredentialInputValidator;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserRegistrationProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 /**
- * 여기서는
- * addUser() 로 user 생성
- * updateCredential() 로 비밀번호 저장
- * getUserByUsername() 에서 조회하고
- * isValid() 에서 로그인 검증?
+ * 따지자며 Service 레이어
+ *
+ * UserLookupProvider -> 사용자 찾기
+ * CredentialInputValidator -> 비밀번호 검증
+ * CredentialInputUpdater -> 비밀번호 저장/변경
+ *
+ * 강상민 : ISFJ
+ * 김예은 : ESFJ
  */
 
 
@@ -132,13 +135,13 @@ public class FcUserStorageProvider implements
         String rawPassword = input.getChallengeResponse();
         String encodedPassword = adapter.getUserEntity().getPassword();
 
+
         if (rawPassword == null || encodedPassword == null) {
             return false;
         }
 
-        // 일단 임시 비교
-        // 나중에 BCrypt로 교체
-        return rawPassword.equals(encodedPassword);
+        // PasswordUtil 써서 비교
+        return PasswordUtil.matches(rawPassword, encodedPassword);
     }
 
     @Override
@@ -156,8 +159,9 @@ public class FcUserStorageProvider implements
             return false;
         }
 
-        // 일단 임시 저장
-        // 나중에 BCrypt 해시 적용
+        rawPassword = PasswordUtil.encode(rawPassword);
+
+        // BCrypt 해시 적용
         userRepository.updatePassword(adapter.getUserEntity().getId(), rawPassword);
         adapter.getUserEntity().setPassword(rawPassword);
 
@@ -172,4 +176,6 @@ public class FcUserStorageProvider implements
     public Stream<String> getDisableableCredentialTypesStream(RealmModel realm, UserModel user) {
         return Stream.empty();
     }
+
+
 }

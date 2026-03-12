@@ -8,6 +8,10 @@ import org.keycloak.models.RealmModel;
 import org.keycloak.storage.StorageId;
 import org.keycloak.storage.adapter.AbstractUserAdapterFederatedStorage;
 
+/**
+ * Controller 같은 느낌
+ */
+
 public class FcUserAdapter extends AbstractUserAdapterFederatedStorage {
 
     private final UserEntity user;

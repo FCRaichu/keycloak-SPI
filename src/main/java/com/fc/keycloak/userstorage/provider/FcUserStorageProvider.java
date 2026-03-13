@@ -13,9 +13,6 @@ import org.keycloak.credential.CredentialInputValidator;
 import org.keycloak.credential.CredentialInputUpdater;
 import org.keycloak.storage.user.UserLookupProvider;
 import org.keycloak.storage.user.UserQueryProvider;
-import org.keycloak.storage.user.UserRegistrationProvider;
-
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -34,7 +31,7 @@ import java.util.stream.Stream;
 public class FcUserStorageProvider implements
         UserStorageProvider,
         UserLookupProvider,
-        UserRegistrationProvider,
+//        UserRegistrationProvider, 회원 가입 처리는 Spring 에서처리
         CredentialInputValidator,
         CredentialInputUpdater,
         UserQueryProvider {
@@ -82,28 +79,6 @@ public class FcUserStorageProvider implements
     @Override
     public UserModel getUserByEmail(RealmModel realm, String email) {
         return null;
-    }
-
-    @Override
-    public UserModel addUser(RealmModel realm, String username) {
-        if (userRepository.existsByUserId(username)) {
-            throw new IllegalStateException("이미 존재하는 userId 입니다.");
-        }
-
-        UserEntity user = new UserEntity();
-        user.setUserId(username);
-        user.setRole("USER");
-        user.setPoints(0);
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
-
-        UserEntity savedUser = userRepository.save(user);
-        return new FcUserAdapter(session, realm, model, savedUser, userRepository);
-    }
-
-    @Override
-    public boolean removeUser(RealmModel realm, UserModel user) {
-        return false;
     }
 
     @Override
@@ -238,9 +213,34 @@ public class FcUserStorageProvider implements
         return Stream.empty();
     }
 
-    @Override
-    public int getUsersCount(RealmModel realm) {
-        return userRepository.countAll();
-    }
+    /** 회원가입은 Spring server 에서 별도 진행 */
+//    @Override
+//    public UserModel addUser(RealmModel realm, String username) {
+//        if (userRepository.existsByUserId(username)) {
+//            throw new IllegalStateException("이미 존재하는 userId 입니다.");
+//        }
+//
+//        UserEntity user = new UserEntity();
+//        user.setUserId(username);
+//        user.setRole("USER");
+//        user.setPoints(0);
+//        user.setCreatedAt(LocalDateTime.now());
+//        user.setUpdatedAt(LocalDateTime.now());
+//
+//        UserEntity savedUser = userRepository.save(user);
+//        return new FcUserAdapter(session, realm, model, savedUser, userRepository);
+//    }
+
+    /** 회원 삭제는 처리 x */
+//    @Override
+//    public boolean removeUser(RealmModel realm, UserModel user) {
+//        return false;
+//    }
+
+    /** 유저 수 카운터도 불 필요 */
+//    @Override
+//    public int getUsersCount(RealmModel realm) {
+//        return userRepository.countAll();
+//    }
 
 }

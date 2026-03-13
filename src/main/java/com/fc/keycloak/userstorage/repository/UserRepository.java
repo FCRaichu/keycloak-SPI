@@ -11,19 +11,19 @@ public interface UserRepository {
 
     Optional<UserEntity> findByUserId(String userId);
 
-    UserEntity save(UserEntity user);
-
     void updateNickname(Long id, String nickname);
 
     void updatePassword(Long id, String encodedPassword);
 
-    boolean existsByUserId(String userId);
-
-    boolean existsByNickname(String nickname);
-
     List<UserEntity> findAll(Integer firstResult, Integer maxResults);
 
     List<UserEntity> findByUserIdContaining(String keyword, Integer firstResult, Integer maxResults);
+
+    UserEntity save(UserEntity user);
+
+    boolean existsByUserId(String userId);
+
+    boolean existsByNickname(String nickname);
 
     int countAll();
 

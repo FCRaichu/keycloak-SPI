@@ -77,7 +77,7 @@ public class FcUserAdapter extends AbstractUserAdapterFederatedStorage {
 
         String dbRole = user.getRole(); // "USER" or "ADMIN"
 
-//        System.out.println("1. dbRole = " + dbRole); 디버깅 용도
+        System.out.println("1. dbRole = " + dbRole); // 디버깅 용도
         
         if (dbRole != null && !dbRole.isBlank()) {
             RoleModel roleModel = realm.getRole(dbRole);
@@ -107,7 +107,7 @@ public class FcUserAdapter extends AbstractUserAdapterFederatedStorage {
         return super.getFirstAttribute(name);
     }
 
-    /** 여기서 claim 에 id, userId, nicname, role 올릴 수 있음! */
+    /** 여기서 claim 에 id, userId, nickname, role 올릴 수 있음! */
     // 기존 : Keycloak의 federated storage에 저장된 attribute 를 조회하는 방법
     // 변경 : DB 객체 user에서 직접 값을 꺼내서 반환하는 방법 (전부 !!)
     // fedreated storage -> 사용자 원본은 원래는 DB에 있지만, Keycloak 에서 추가로 관리하고 싶은 사용자 속성을 Keycloak 쪽 DB 에 따로 저장해둠
